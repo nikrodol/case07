@@ -25,19 +25,39 @@ def text_preparation(text):
     return text
 
 
-def str_to_list():
-    """ Делит текст на слова и загоняет их в список. """
-    # TODO
+def dict_of_links(text_list):
+    """ Составляет словарь звеньвев и связок из подоваемого списка """
+    d = {}
+    l = []
+    for i in range(len(text_list)-1):
+        if text_list[i] not in d:
+            for j in range(len(text_list)-1):
+                if text_list[i] == text_list[j]:
+                    l.append(text_list[j+1])
+            d.update({text_list[i]: l})
+        l = []
+    d.update({text_list[len(text_list) - 1]: []})
+    return d
 
 
-def list_to_dict():
-    """ Преобразует список из str_to_list в словарь звеньев и связей. """
-    # TODO
+def start_words(links):
+    """ Вытаскивает из списка словаря стартовые слова и загоняет их в отдельный список. """
+    start = []
+    words = links.keys()
+    for char in words:
+        if char[0] == char[0].upper():
+            start.append(char)
+    return start
 
 
-def start_words():
-    """ Вытаскивает из списка str_to_list стартовые слова и загоняет их в отдельный список. """
-    # TODO
+def stop_words(links):
+    """ Вытаскивает из списка словаря стоповые слова и загоняет их в отдельный список. """
+    stop = []
+    words = links.keys()
+    for char in words:
+        if char[-1] == '.':
+            stop.append(char)
+    return stop
 
 
 def text_generator():
@@ -50,8 +70,15 @@ def main():
     txt_file = input()
     text = text_preparation(file_read(txt_file))
     print(text)
+    # Ниже то что я говорил Альберт
+    links = dict_of_links(text)
+    start = start_words(links)
+    stop = stop_words(links)
+    print(links, list(links.keys()), list(links.values()), start, stop,sep='\n')
 
 
 if __name__ == '__main__':
     main()
+
+
 
